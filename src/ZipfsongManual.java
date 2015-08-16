@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-class Zipfsong {
+class ZipfsongManual {
 
     public static void main(String[] args) {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
@@ -30,9 +30,13 @@ class Zipfsong {
                     final SongNode newSongNode = new SongNode(x);
                     newSongNode.next = queue;
                     queue = newSongNode;
-                } else
+                } else if (queue.next == null) {
+                    //If there are no more elements, just attach it
+                    queue.next = new SongNode(x);
+                } else {
                     //Otherwise, find its place
-                    pushNonTopSong(queue, x);
+                    pushNonTopSong(queue.next, x);
+                }
             }
 
             SongNode node = queue;
@@ -73,7 +77,7 @@ class Zipfsong {
      * Dummy data structure to be able to refer back to the song names
      */
     private static class Song {
-        private final float qi;
+        private final long qi;
         private final String name;
 
         private Song(long fi, String name, int indexInAlbum) {
